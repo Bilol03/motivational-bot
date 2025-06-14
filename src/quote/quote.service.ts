@@ -1,26 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { UpdateQuoteDto } from './dto/update-quote.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Quote } from './entities/quote.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class QuoteService {
-  create(createQuoteDto: CreateQuoteDto) {
-    return 'This action adds a new quote';
+  constructor(
+    @InjectRepository(Quote)
+    private readonly quoteRepository: Repository<Quote>
+  ){}
+
+  async create(createQuoteDto: CreateQuoteDto) {
+    const data = await this.quoteRepository.create(createQuoteDto)
+    return await this.quoteRepository.save(data)
   }
 
-  findAll() {
-    return `This action returns all quote`;
+  async findAll() {
+    return await this.quoteRepository.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} quote`;
+  async findOne(id: number) {
+    const data = await this.quoteRepository.findOne({where: {id}})
+    if(!data) throw new NotFoundException("Quote not found")
+    return data
   }
 
-  update(id: number, updateQuoteDto: UpdateQuoteDto) {
-    return `This action updates a #${id} quote`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} quote`;
-  }
 }

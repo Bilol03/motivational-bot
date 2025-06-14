@@ -22,13 +22,4 @@ export class QuoteController {
     return this.quoteService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateQuoteDto: UpdateQuoteDto) {
-    return this.quoteService.update(+id, updateQuoteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.quoteService.remove(+id);
-  }
 }
