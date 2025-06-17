@@ -8,5 +8,6 @@ import { QuoteService } from './quote.service';
   imports: [TypeOrmModule.forFeature([Quote])],
   controllers: [QuoteController],
   providers: [QuoteService],
+  exports: [QuoteService, TypeOrmModule],
 })
 export class QuoteModule {}
